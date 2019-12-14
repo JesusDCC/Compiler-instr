@@ -185,17 +185,15 @@ LIST* nextInstrs(LIST* l){
 }
 
 LIST* append(LIST* l1, LIST* l2){
-
+	LIST* l = l1;
 	if(l1==NULL) return l2;
-
-	else
-		while(l1->next != NULL)
-			l1=l1->next;
-		l1->next=l2;
+	while(l1->next != NULL)
+		l1=l1->next;
+	l1->next=l2;
 			
-
-			return l1;
+	return l;
 }
+
  
 LIST* mkInstrList(Instr* i, LIST* l){                        //criar lista
   LIST* list = (LIST*)malloc(sizeof(LIST));
