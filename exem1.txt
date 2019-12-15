@@ -3,6 +3,9 @@ if 2 == 3{
 
 while x == 3 {
 	let s = 1;
+	if y == z {
+		let i = 2;
+	}
 }	
 }
 

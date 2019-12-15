@@ -240,7 +240,7 @@ void printInstr(Instr* instr){
 	//printf("entrou %d",instr->ikind);
 				printAtom(instr->attr.atrib.a1);
 			//printf("ola\n");
-		 	printf(" := ");
+		 	printf(":= ");
 		 	printAtom(instr->attr.atrib.a2);
 		 	printf("\n");
 		 	break;
@@ -248,11 +248,11 @@ void printInstr(Instr* instr){
 		 	printf("%s\n", instr->attr.label.label1);
 		 	break;
 		 case I_GOTO:
-		 	printf(" goto %s\n", instr->attr.i_goto.label1);
+		 	printf("goto %s\n", instr->attr.i_goto.label1);
 		 	break;
 		case I_PLUS:
 			printAtom(instr->attr.op.a1);
-			printf(" := ");
+			printf(":= ");
 			printAtom(instr->attr.op.a2);
 			printf("+");
 			printAtom(instr->attr.op.a3);
@@ -260,7 +260,7 @@ void printInstr(Instr* instr){
 			break;
 		case I_MINUS:
 			printAtom(instr->attr.op.a1);
-			printf(" := ");
+			printf(":= ");
 			printAtom(instr->attr.op.a2);
 			printf("-");
 			printAtom(instr->attr.op.a3);
@@ -268,7 +268,7 @@ void printInstr(Instr* instr){
 			break;
 		case I_DIV:
 			printAtom(instr->attr.op.a1);
-			printf(" := ");
+			printf(":= ");
 			printAtom(instr->attr.op.a2);
 			printf("/");
 			printAtom(instr->attr.op.a3);
@@ -276,7 +276,7 @@ void printInstr(Instr* instr){
 			break;
 		case I_MULT:
 			printAtom(instr->attr.op.a1);
-			printf(" := ");
+			printf(":= ");
 			printAtom(instr->attr.op.a2);
 			printf("*");
 			printAtom(instr->attr.op.a3);
@@ -286,66 +286,66 @@ void printInstr(Instr* instr){
 			printf("if ");
 			printAtom(instr->attr.i_if.a1);
 			//printf("%d ", instr->attr.i_if.operator);
-			printf(" >= ");
+			printf(">= ");
 			printAtom(instr->attr.i_if.a2);
 			printf("then ");
 			printf("%s ",instr->attr.i_if.label1);
-			printf(" else ");
+			printf("else ");
 			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		case I_IFG:
 			printf("if ");
 			printAtom(instr->attr.i_if.a1);
 			//printf("%d " ,instr->attr.i_if.operator);
-			printf(" > ");
+			printf("> ");
 			printAtom(instr->attr.i_if.a2);
 			printf("then ");
 			printf("%s ",instr->attr.i_if.label1);
-			printf(" else ");
+			printf("else ");
 			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		case I_IFL:
 			printf("if ");
 			printAtom(instr->attr.i_if.a1);
 			//printf("%d " ,instr->attr.i_if.operator);
-			printf(" < ");
+			printf("< ");
 			printAtom(instr->attr.i_if.a2);
-			printf(" then ");
+			printf("then ");
 			printf("%s ",instr->attr.i_if.label1);
-			printf(" else ");
+			printf("else ");
 			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		case I_IFLE:
 			printf("if ");
 			printAtom(instr->attr.i_if.a1);
 			//printf("%d " ,instr->attr.i_if.operator);
-			printf(" <= ");
+			printf("<= ");
 			printAtom(instr->attr.i_if.a2);
-			printf(" then ");
+			printf("then ");
 			printf("%s ",instr->attr.i_if.label1);
-			printf(" else ");
+			printf("else ");
 			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 			case I_IFEQ:
 			printf("if ");
 			printAtom(instr->attr.i_if.a1);
 			//printf("%d ", instr->attr.i_if.operator);
-			printf(" == ");
+			printf("== ");
 			printAtom(instr->attr.i_if.a2);
-			printf(" then ");
+			printf("then ");
 			printf("%s ",instr->attr.i_if.label1);
-			printf(" else ");
+			printf("else ");
 			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		case I_IFNEQ:
 			printf("if ");
 			printAtom(instr->attr.i_if.a1);
 			//printf("%d ", instr->attr.i_if.operator);
-			printf(" != ");
+			printf("!= ");
 			printAtom(instr->attr.i_if.a2);
-			printf(" then ");
+			printf("then ");
 			printf("%s ",instr->attr.i_if.label1);
-			printf(" else ");
+			printf("else ");
 			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		default:
