@@ -965,7 +965,7 @@ case 34:
 YY_RULE_SETUP
 #line 52 "scanner.flex"
 {
-	yylval.charValue = yytext;
+	yylval.charValue = strdup(yytext);
 	return VAR;
 }
 	YY_BREAK

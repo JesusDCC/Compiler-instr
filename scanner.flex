@@ -50,7 +50,7 @@ int yyline = 1;
 "&" { return COMM;}
 
 [a-z][a-zA-Z]* {
-	yylval.charValue = yytext;
+	yylval.charValue = strdup(yytext);
 	return VAR;
 }
 

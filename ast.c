@@ -1,8 +1,8 @@
 // AST constructor functions
-
+#include<stdio.h>
 #include <stdlib.h> // for malloc
 #include "ast.h" // AST header
-
+ 
 
 
 BoolExpr* ast_boolean(int v){
@@ -89,6 +89,13 @@ Cmd* while_declaration(BoolExpr* cond, Cmd* cmd, CommandList* list){
   return node;
 }
 
+
+Expr* ast_var(char* v){
+  Expr* node = (Expr*) malloc(sizeof(Expr));
+  node->kind = VARI;
+  node->attr.varType.var = v;
+  return node;
+}
 
 Expr* ast_integer(int v) {
   Expr* node = (Expr*) malloc(sizeof(Expr));

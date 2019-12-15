@@ -7,10 +7,6 @@ fn main(){
 			 let x = 2;
 			 let w = 3;
 		}
-		else {
-			println!("fvrv {}", x);
-			read_line(&yea);
-		}
 	}
 }
 

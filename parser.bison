@@ -101,7 +101,11 @@ cmdlist:
 expr: 
   INT { 
     $$ = ast_integer($1); 
-  } 
+  }
+  |
+  VAR {
+   $$ = ast_var($1);
+  }
   | 
   expr PLUS expr { 
     $$ = ast_operation(PLUS, $1, $3); 

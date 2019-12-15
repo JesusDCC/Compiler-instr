@@ -237,10 +237,18 @@ void printAtom(Atom* atom){
 void printInstr(Instr* instr){
 	switch(instr->ikind){
 		case I_ATRIB:
-			printAtom(instr->attr.atrib.a1);
+	//printf("entrou %d",instr->ikind);
+				printAtom(instr->attr.atrib.a1);
+			//printf("ola\n");
 		 	printf(" := ");
 		 	printAtom(instr->attr.atrib.a2);
 		 	printf("\n");
+		 	break;
+		 case I_LABEL:
+		 	printf("%s\n", instr->attr.label.label1);
+		 	break;
+		 case I_GOTO:
+		 	printf(" goto %s\n", instr->attr.i_goto.label1);
 		 	break;
 		case I_PLUS:
 			printAtom(instr->attr.op.a1);
@@ -283,18 +291,18 @@ void printInstr(Instr* instr){
 			printf("then ");
 			printf("%s ",instr->attr.i_if.label1);
 			printf(" else ");
-			printf("%s " , instr->attr.i_if.label2);
+			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		case I_IFG:
 			printf("if ");
 			printAtom(instr->attr.i_if.a1);
 			//printf("%d " ,instr->attr.i_if.operator);
-			printf(" >= ");
+			printf(" > ");
 			printAtom(instr->attr.i_if.a2);
 			printf("then ");
 			printf("%s ",instr->attr.i_if.label1);
 			printf(" else ");
-			printf("%s " , instr->attr.i_if.label2);
+			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		case I_IFL:
 			printf("if ");
@@ -305,7 +313,7 @@ void printInstr(Instr* instr){
 			printf(" then ");
 			printf("%s ",instr->attr.i_if.label1);
 			printf(" else ");
-			printf("%s " , instr->attr.i_if.label2);
+			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		case I_IFLE:
 			printf("if ");
@@ -316,18 +324,18 @@ void printInstr(Instr* instr){
 			printf(" then ");
 			printf("%s ",instr->attr.i_if.label1);
 			printf(" else ");
-			printf("%s " , instr->attr.i_if.label2);
+			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 			case I_IFEQ:
 			printf("if ");
 			printAtom(instr->attr.i_if.a1);
 			//printf("%d ", instr->attr.i_if.operator);
-			printf(" <= ");
+			printf(" == ");
 			printAtom(instr->attr.i_if.a2);
 			printf(" then ");
 			printf("%s ",instr->attr.i_if.label1);
 			printf(" else ");
-			printf("%s " , instr->attr.i_if.label2);
+			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		case I_IFNEQ:
 			printf("if ");
@@ -338,7 +346,7 @@ void printInstr(Instr* instr){
 			printf(" then ");
 			printf("%s ",instr->attr.i_if.label1);
 			printf(" else ");
-			printf("%s " , instr->attr.i_if.label2);
+			printf("%s\n" , instr->attr.i_if.label2);
 			break;
 		default:
 			printf("erro no kind\n");
@@ -368,22 +376,6 @@ LIST* compileCmdList(CommandList* l){    //passar a lista do trab1 para uma list
 }
 
 
-/*LIST* compileCmdList(CommandList* root){    //passar a lista do trab1 para uma lista de instruçoes
-	if(root == NULL) return NULL;
-	LIST* l3 = (LIST*) malloc(sizeof(LIST));
-	while(root->cmd!=NULL){
-		LIST* l1 = compileCmd(root->cmd);
-		if(root->next==NULL) {
-			return l1;
-			l3 = append(l1,NULL);
-			break;
-		}
-		LIST* l2 = compileCmdList(root->next);
-		l3 = append(l1,l2);
-		root = root->next;
-	}
-	return l3;
-}*/
 
 char* newLabel(){
 	char* name = (char*)malloc(sizeof(char));
@@ -407,6 +399,9 @@ LIST* compileCmd(Cmd* command){
 	LIST* l10 = (LIST*) malloc(sizeof(LIST));
 	LIST* l11 = (LIST*) malloc(sizeof(LIST));
 	LIST* l12 = (LIST*) malloc(sizeof(LIST));
+	LIST* l13 = (LIST*) malloc(sizeof(LIST));
+	LIST* l14 = (LIST*) malloc(sizeof(LIST));
+	LIST* l15 = (LIST*) malloc(sizeof(LIST));
 
 	char* reg="";
 	char* label1 = "";
@@ -416,8 +411,8 @@ LIST* compileCmd(Cmd* command){
 	switch(command -> kind) {
 		case LET:
 			reg = newVar();
-			l = mkInstrList(instr_atrib(atom_String(command->attr.let.var), atom_String(reg)), NULL);
-			l = append(l,compileExpr(command->attr.let.value, reg));
+			l = compileExpr(command->attr.let.value, reg);
+			l = append(l,mkInstrList(instr_atrib(atom_String(command->attr.let.var), atom_String(reg)),NULL));
 			return l;
 
 		case WHILE:
@@ -429,12 +424,14 @@ LIST* compileCmd(Cmd* command){
 			l2 = append(linicio, l1); 
 			l3 = mkInstrList(instr_label(label1), NULL);
 			l4 = append(l2, l3);
-			l5 = compileCmdList(command->attr.whileType.list); 
-			l6 = append(l4, l5);
-			l7 = mkInstrList(instr_goto(label3), NULL);   //voltar para a label do inicio
+			l5 = compileCmd(command->attr.whileType.cmd);
+			l6= append(l4, l5);
+			l7= compileCmdList(command->attr.whileType.list); 
 			l8 = append(l6, l7);
-			l9 = mkInstrList(instr_label(label2), NULL);
-			l10 = append(l8, l9);     
+			l9 = mkInstrList(instr_goto(label3), NULL);   //voltar para a label do inicio
+			l10 = append(l8, l9);
+			l11= mkInstrList(instr_label(label2), NULL);
+			l12 = append(l10, l11);     
 			return l10;
 
 		case IF:	
@@ -443,10 +440,12 @@ LIST* compileCmd(Cmd* command){
 			l = compileBool(command->attr.ifType.cond , label1, label2);
 			l1 = mkInstrList(instr_label(label1), NULL);
 			l2 = append(l, l1);
-			l3 = compileCmdList(command->attr.ifType.list); 
-			l4 = append(l2, l3);
-			l5 = mkInstrList(instr_label(label2), NULL);
+			l3 = compileCmd(command->attr.ifType.cmd);
+			l4=append(l2,l3);
+			l5 = compileCmdList(command->attr.ifType.list); 
 			l6 = append(l4, l5);
+			l7 = mkInstrList(instr_label(label2), NULL);
+			l8 = append(l6, l7);
 			return l6; 
 
 		case IFELSE:
@@ -456,17 +455,21 @@ LIST* compileCmd(Cmd* command){
 			l = compileBool(command->attr.elseType.cond , label1, label2);
 			l1 = mkInstrList(instr_label(label1), NULL);
 			l2 = append(l, l1);
-			l3 = compileCmdList(command->attr.elseType.flist);
+			l3 = compileCmd(command->attr.elseType.cmd);
 			l4 = append(l2,l3);
-			l5 = mkInstrList(instr_goto(label3), NULL);   //voltar para a label do inicio
+			l5 = compileCmdList(command->attr.elseType.flist);
 			l6 = append(l4,l5);
-			l7 = mkInstrList(instr_label(label2), NULL);   //voltar para a label do inicio
+			l7 = mkInstrList(instr_goto(label3), NULL);   //voltar para a label do inicio
 			l8 = append(l6,l7);
-			l9 = compileCmdList(command->attr.elseType.slist); 
-			l10 = append(l8, l9);
-			l11 = mkInstrList(instr_label(label3), NULL);
-			l12 = append(l10, l11);
-			return l12;
+			l9 = mkInstrList(instr_label(label2), NULL);   //voltar para a label do inicio
+			l10 = append(l8,l9);
+			l11 = compileCmd(command->attr.elseType.cmdelse);
+			l12 = append(l10,l11);
+			l12 = compileCmdList(command->attr.elseType.slist); 
+			l13 = append(l12, l13);
+			l14 = mkInstrList(instr_label(label3), NULL);
+			l15 = append(l13, l14);
+			return l15;
 
 	/*	case PRINT:
 		reg =  newVar();
@@ -506,6 +509,10 @@ LIST* compileExpr(Expr* e, char* r){
 		LIST* l2 = compileExpr(e->attr.op.right, r2);
 		LIST* l3 = append(l1, l2);
 		l4 = append(l3, mkInstrList(mkInstrOp(e->attr.op.operator, atom_String(r), atom_String(r1), atom_String(r2)), NULL));
+	}
+	else if(e->kind == VARI){
+		LIST* l = mkInstrList(instr_atrib(atom_String(r), atom_String(e->attr.varType.var)), NULL);
+		return l;
 	}
 	return l4;
 }
@@ -609,6 +616,5 @@ LIST* compileBool(BoolExpr* e, char *labelTrue, char *labelFalse){
   		return l4;
 	}   
 }
-
 
 

@@ -8,10 +8,14 @@
 struct _Expr {
   enum { 
     E_INTEGER,
+    VARI,
     E_OPERATION
   } kind;
   union {
     int value; // for integer values
+    struct{
+      char* var;
+    }varType;
     struct { 
       int operator; // PLUS, MINUS, etc 
       struct _Expr* left;
@@ -112,6 +116,7 @@ Cmd* print_variable(char* string, char* var);
 Cmd* read_line(char* var);
 Cmd* while_declaration(BoolExpr* cond, Cmd* cmd,CommandList* list);
 
+Expr* ast_var(char* v);
 BoolExpr* ast_boolean(int v);
 BoolExpr* ast_boolOp(int operator, Expr* left, Expr* right);
 Expr* ast_integer(int v);
